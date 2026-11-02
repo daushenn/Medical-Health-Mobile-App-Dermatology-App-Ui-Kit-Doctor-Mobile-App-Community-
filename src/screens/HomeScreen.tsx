@@ -1,8 +1,11 @@
 import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors } from '../theme';
 import { doctors } from '../data/doctors';
+import type { RootStackParamList } from '../navigation/types';
 
 const days = [
   { d: 9, n: 'MON' }, { d: 10, n: 'TUE' }, { d: 11, n: 'WED', active: true },
@@ -10,6 +13,8 @@ const days = [
 ];
 
 export default function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <FlatList
@@ -46,7 +51,11 @@ export default function HomeScreen() {
           </View>
         }
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.card}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Doctor', { doctorId: item.id })}
+          >
             <View style={styles.docPhoto} />
             <View style={{ flex: 1 }}>
               <View style={styles.docInfo}>
@@ -61,7 +70,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </SafeAreaView>
